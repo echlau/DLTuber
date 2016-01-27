@@ -1,0 +1,9 @@
+c:\users\eric lau\desktop\COMP3951\DLTuber\DLTuber\bin\Debug\DLTuber.exe.config
+c:\users\eric lau\desktop\COMP3951\DLTuber\DLTuber\bin\Debug\DLTuber.exe
+c:\users\eric lau\desktop\COMP3951\DLTuber\DLTuber\bin\Debug\DLTuber.pdb
+c:\users\eric lau\desktop\COMP3951\DLTuber\DLTuber\obj\Debug\DLTuber.csprojResolveAssemblyReference.cache
+c:\users\eric lau\desktop\COMP3951\DLTuber\DLTuber\obj\Debug\DLTuber.Form1.resources
+c:\users\eric lau\desktop\COMP3951\DLTuber\DLTuber\obj\Debug\DLTuber.Properties.Resources.resources
+c:\users\eric lau\desktop\COMP3951\DLTuber\DLTuber\obj\Debug\DLTuber.csproj.GenerateResource.Cache
+c:\users\eric lau\desktop\COMP3951\DLTuber\DLTuber\obj\Debug\DLTuber.exe
+c:\users\eric lau\desktop\COMP3951\DLTuber\DLTuber\obj\Debug\DLTuber.pdb

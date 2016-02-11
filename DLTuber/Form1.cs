@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DLTuber
@@ -38,7 +31,15 @@ namespace DLTuber
         }
         private void loadThumbNail(string url)
         {
-            videoThumbNail.Load("http://img.youtube.com/vi/" + url + "/1.jpg"); 
+            try
+            {
+                videoThumbNail.Load("https://i.ytimg.com/vi/" + url + "/mqdefault.jpg");
+            } 
+            catch(WebException e)
+            {
+                //videoThumbNail.Image = System.Drawing.Image.ErrorImage; 
+            }
+            MessageBox.Show(videoThumbNail.Image.Size.Width + " " + videoThumbNail.Image.Size.Height);
         }
         private void handleVideoClick(object sender, EventArgs e)
         {
@@ -50,12 +51,8 @@ namespace DLTuber
             }
             else
             {
-                MessageBox.Show("Not a Valid URL "); 
+                MessageBox.Show("Not a valid Youtube URL please try again "); 
             }
-        }
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
         }
     }
 

@@ -6,6 +6,8 @@ using System.Runtime.InteropServices;
 using System.IO;
 using System.Collections.Specialized;
 using System.Web;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DLTuber
 {
@@ -19,8 +21,7 @@ namespace DLTuber
         public Form1()
         {
             InitializeComponent();
-            progressBar1.SetState(2);
-            progressBar1.Increment(40);
+            //progressBar1.SetState(1);
         }
         private bool isValidUrl(string url)
         {            
@@ -47,9 +48,9 @@ namespace DLTuber
         {
             try
             {
-                videoThumbNail.Load("https://i.ytimg.com/vi/" + url + "/mqdefault.jpg");
                 title = GetTitle(url);
                 vidTitle.Text = "Title: " + title;
+                videoThumbNail.Load("https://i.ytimg.com/vi/" + url + "/mqdefault.jpg");
             } 
             catch(WebException e)
             {
@@ -57,13 +58,26 @@ namespace DLTuber
             }
             
         }
-        private string openFileLocation()
+        private string openFileLocation(string fType)
         {
-            string dir = " ";
-            DialogResult res = fileLocationDialog.ShowDialog(); 
-            if(res == DialogResult.OK)
+            string dir = " "; 
+            //fileLocationDialog.Filter = "mp3|*.mp3|mp4|*.mp4|wav|*.wav";
+            switch(fType)
             {
-                dir = Path.GetDirectoryName(fileLocationDialog.FileName); 
+                case "mp3":
+                    fileLocationDialog.Filter = "mp3|*.mp3";
+                    break;
+                case "mp4":
+                    fileLocationDialog.Filter = "mp4|*.mp4";
+                    break;
+                case "wav":
+                    fileLocationDialog.Filter = "wav|*.wav";
+                    break;
+            }
+            if(fileLocationDialog.ShowDialog() == DialogResult.OK)
+            {
+                //dir = Path.GetDirectoryName(fileLocationDialog.FileName);
+                dir = fileLocationDialog.FileName; 
             }
 
            /* FolderBrowserDialog currentPath = new FolderBrowserDialog();
@@ -74,9 +88,23 @@ namespace DLTuber
 
             return dir; 
         }
-        private void downloadVideo()
+        private void downloadVideo(string type, string url, string path)
         {
-            //Parameter for video type
+            if (path != " ")
+            {
+                //Parameter for video type
+                IEnumerable<VideoInfo> videoInfos = DownloadUrlResolver.GetDownloadUrls(url);
+                VideoInfo video = videoInfos.Where(info => info.CanExtractAudio).OrderByDescending(info => info.AudioBitrate).First();
+                if (video.RequiresDecryption)
+                {
+                    DownloadUrlResolver.DecryptDownloadUrl(video);
+                }
+                var audioDownloader = new AudioDownloader(video, path);
+                audioDownloader.DownloadProgressChanged += (sender, args) => progressBar1.Value = (int)(args.ProgressPercentage * 0.85);
+                audioDownloader.AudioExtractionProgressChanged += (sender, args) => progressBar1.Value = (int)(85 + args.ProgressPercentage * 0.15);
+
+                audioDownloader.Execute();
+            }
         }
         private void handleVideoClick(object sender, EventArgs e)
         {
@@ -85,20 +113,21 @@ namespace DLTuber
             if(isValidUrl(url))
             {
                 loadThumbNail(url.Split('=')[1]);
-                //string dir = openFileLocation();
-                //MessageBox.Show(dir); 
+                string dir;
+                //System.Diagnostics.Debug.WriteLine(dir); 
                 if (radioButton1.Checked)
                 {
-                    MessageBox.Show(radioButton1.Text);
+                    dir = openFileLocation("mp3");
+                    downloadVideo("mp3", url, dir);
                 }
                 else if (radioButton2.Checked)
                 {
-                    MessageBox.Show(radioButton2.Text);
+                    dir = openFileLocation("mp4");
+                    //downloadVideo("mp4", url, dir);
                 }
                 else
                 {
-                    
-                    MessageBox.Show(radioButton3.Text);
+                    dir = openFileLocation("wav");
                 }
             }
             //Switch statement for radio buttons

@@ -3,7 +3,6 @@ using System.Windows.Forms;
 using System.Net;
 using YoutubeExtractor;
 using System.Runtime.InteropServices;
-using System.IO;
 using System.Collections.Specialized;
 using System.Web;
 using System.Collections.Generic;
@@ -13,15 +12,31 @@ namespace DLTuber
 {
     public partial class Form1 : Form
     {
-        private string title; 
-
-        //private byte[] downloadedByteStream;
-        //private IEnumerable<VideoInfo> videoInfos; 
-        //private VideoDownloader downloader = new VideoDownloader(); 
+        private string title;
+        private string ERR_MSSG = "DLTuber has failed to sense an active internet connection," + 
+                                  "you can still use DLTuber but some features may not be available";
+        private InternetConnection conn; 
         public Form1()
         {
             InitializeComponent();
-            //progressBar1.SetState(1);
+        }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            conn = new InternetConnection(); 
+            if(!isConnected(conn))
+            {
+                MessageBox.Show(ERR_MSSG, "No Internet Connection",
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                selectVideo.Enabled = false;
+            }   
+            else
+            {
+                checkInternet.Enabled = false; 
+            }
+        }
+        private bool isConnected(InternetConnection c)
+        {
+            return c.connected() ? true : false; 
         }
         private bool isValidUrl(string url)
         {            
@@ -58,10 +73,22 @@ namespace DLTuber
             }
             
         }
+        private void checkConn(object sender, EventArgs e)
+        {
+            if(conn.connected())
+            {
+                selectVideo.Enabled = true;
+                checkInternet.Enabled = false; 
+            }
+            else
+            {
+               MessageBox.Show("DLTuber does not sense an internet connection", "No Internet Connection",
+               MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         private string openFileLocation(string fType)
         {
             string dir = " "; 
-            //fileLocationDialog.Filter = "mp3|*.mp3|mp4|*.mp4|wav|*.wav";
             switch(fType)
             {
                 case "mp3":
@@ -76,19 +103,12 @@ namespace DLTuber
             }
             if(fileLocationDialog.ShowDialog() == DialogResult.OK)
             {
-                //dir = Path.GetDirectoryName(fileLocationDialog.FileName);
+                
                 dir = fileLocationDialog.FileName; 
             }
-
-           /* FolderBrowserDialog currentPath = new FolderBrowserDialog();
-            fileLoc.InitialDirectory = currentPath.SelectedPath;
-            DialogResult res = fileLoc.ShowDialog();
-            if (res == DialogResult.OK)
-                dir = fileLoc.FileName; */ 
-
             return dir; 
         }
-        private void downloadVideo(string type, string url, string path)
+        private void downloadAudio(string type, string url, string path)
         {
             if (path != " ")
             {
@@ -108,36 +128,75 @@ namespace DLTuber
         }
         private void handleVideoClick(object sender, EventArgs e)
         {
-            Button b = (Button)sender;
-            string url = urlBox.Text; 
-            if(isValidUrl(url))
+            if (!conn.connected())
             {
-                loadThumbNail(url.Split('=')[1]);
-                string dir;
-                //System.Diagnostics.Debug.WriteLine(dir); 
-                if (radioButton1.Checked)
-                {
-                    dir = openFileLocation("mp3");
-                    downloadVideo("mp3", url, dir);
-                }
-                else if (radioButton2.Checked)
-                {
-                    dir = openFileLocation("mp4");
-                    //downloadVideo("mp4", url, dir);
-                }
-                else
-                {
-                    dir = openFileLocation("wav");
-                }
+                MessageBox.Show("DLTuber does not sense an internet connection", "No Internet Connection",
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                selectVideo.Enabled = false;
+                checkInternet.Enabled = true; 
             }
-            //Switch statement for radio buttons
             else
             {
-                vidTitle.Text = "Title";
-                videoThumbNail.Image = null;
-                MessageBox.Show("Not a valid Youtube URL please try again "); 
+                selectVideo.Enabled = true;
+                checkInternet.Enabled = false;
+                Button b = (Button)sender;
+                string url = urlBox.Text;
+                if (isValidUrl(url))
+                {
+                    loadThumbNail(url.Split('=')[1]);
+                    string dir;
+                    //System.Diagnostics.Debug.WriteLine(dir); 
+                    if (radioButton1.Checked)
+                    {
+                        dir = openFileLocation("mp3");
+                        downloadAudio("mp3", url, dir);
+                    }
+                    else if (radioButton2.Checked)
+                    {
+                        dir = openFileLocation("mp4");
+                        downloadVideo("mp4", url, dir);
+                    }
+                    else
+                    {
+                        dir = openFileLocation("wav");
+                    }
+                }
             }
         }
+
+        private void downloadVideo(string v, string url, string dir)
+        {
+            IEnumerable<VideoInfo> videoInfos = DownloadUrlResolver.GetDownloadUrls(url);
+            /*
+            * Select the first .mp4 video with 360p resolution
+            */
+            VideoInfo video = videoInfos
+                .First(info => info.VideoType == VideoType.Mp4 && info.Resolution == 360);
+
+            /*
+             * If the video has a decrypted signature, decipher it
+             */
+            if (video.RequiresDecryption)
+            {
+                DownloadUrlResolver.DecryptDownloadUrl(video);
+            }
+
+            /*
+             * Create the video downloader.
+             * The first argument is the video to download.
+             * The second argument is the path to save the video file.
+             */
+            var videoDownloader = new VideoDownloader(video, dir);
+            // Register the ProgressChanged event and print the current progress
+            videoDownloader.DownloadProgressChanged += (sender, args) => progressBar1.Value = (int)(args.ProgressPercentage * 0.85);
+
+            /*
+             * Execute the video downloader.
+             * For GUI applications note, that this method runs synchronously.
+             */
+            videoDownloader.Execute();
+        }
+
         public string GetTitle(string url)
         {
             WebClient client = new WebClient();

@@ -40,6 +40,7 @@
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.fileLocationDialog = new System.Windows.Forms.SaveFileDialog();
+            this.checkInternet = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.videoThumbNail)).BeginInit();
             this.mediaTypeBox.SuspendLayout();
             this.SuspendLayout();
@@ -157,11 +158,22 @@
             this.radioButton1.Text = "mp3";
             this.radioButton1.UseVisualStyleBackColor = true;
             // 
+            // checkInternet
+            // 
+            this.checkInternet.Location = new System.Drawing.Point(403, 316);
+            this.checkInternet.Name = "checkInternet";
+            this.checkInternet.Size = new System.Drawing.Size(91, 23);
+            this.checkInternet.TabIndex = 11;
+            this.checkInternet.Text = "Check Internet";
+            this.checkInternet.UseVisualStyleBackColor = true;
+            this.checkInternet.Click += new System.EventHandler(this.checkConn);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(554, 351);
+            this.Controls.Add(this.checkInternet);
             this.Controls.Add(this.mediaTypeBox);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -173,6 +185,7 @@
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.videoThumbNail)).EndInit();
             this.mediaTypeBox.ResumeLayout(false);
             this.mediaTypeBox.PerformLayout();
@@ -195,6 +208,7 @@
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.SaveFileDialog fileLocationDialog;
+        private System.Windows.Forms.Button checkInternet;
     }
 }
 

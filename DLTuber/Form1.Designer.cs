@@ -1,6 +1,6 @@
 ﻿namespace DLTuber
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -30,7 +30,7 @@
         {
             this.urlBox = new System.Windows.Forms.TextBox();
             this.selectVideo = new System.Windows.Forms.Button();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.downloadStat = new System.Windows.Forms.ProgressBar();
             this.videoThumbNail = new System.Windows.Forms.PictureBox();
             this.vidTitle = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -40,14 +40,17 @@
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.fileLocationDialog = new System.Windows.Forms.SaveFileDialog();
-            this.checkInternet = new System.Windows.Forms.Button();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkConnectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.videoThumbNail)).BeginInit();
             this.mediaTypeBox.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // urlBox
             // 
-            this.urlBox.Location = new System.Drawing.Point(9, 38);
+            this.urlBox.Location = new System.Drawing.Point(9, 58);
             this.urlBox.Margin = new System.Windows.Forms.Padding(2);
             this.urlBox.Name = "urlBox";
             this.urlBox.Size = new System.Drawing.Size(282, 20);
@@ -56,28 +59,28 @@
             // 
             // selectVideo
             // 
-            this.selectVideo.Location = new System.Drawing.Point(304, 39);
+            this.selectVideo.Location = new System.Drawing.Point(220, 87);
             this.selectVideo.Margin = new System.Windows.Forms.Padding(2);
             this.selectVideo.Name = "selectVideo";
-            this.selectVideo.Size = new System.Drawing.Size(95, 19);
+            this.selectVideo.Size = new System.Drawing.Size(71, 19);
             this.selectVideo.TabIndex = 1;
-            this.selectVideo.Text = "Download Video";
+            this.selectVideo.Text = "Download ";
             this.selectVideo.UseVisualStyleBackColor = true;
             this.selectVideo.Click += new System.EventHandler(this.handleVideoClick);
             // 
-            // progressBar1
+            // downloadStat
             // 
-            this.progressBar1.Location = new System.Drawing.Point(9, 292);
-            this.progressBar1.Margin = new System.Windows.Forms.Padding(2);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(401, 19);
-            this.progressBar1.Step = 1;
-            this.progressBar1.TabIndex = 2;
+            this.downloadStat.Location = new System.Drawing.Point(12, 317);
+            this.downloadStat.Margin = new System.Windows.Forms.Padding(2);
+            this.downloadStat.Name = "downloadStat";
+            this.downloadStat.Size = new System.Drawing.Size(320, 19);
+            this.downloadStat.Step = 1;
+            this.downloadStat.TabIndex = 2;
             // 
             // videoThumbNail
             // 
             this.videoThumbNail.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.videoThumbNail.Location = new System.Drawing.Point(12, 108);
+            this.videoThumbNail.Location = new System.Drawing.Point(12, 133);
             this.videoThumbNail.Margin = new System.Windows.Forms.Padding(2);
             this.videoThumbNail.Name = "videoThumbNail";
             this.videoThumbNail.Size = new System.Drawing.Size(320, 180);
@@ -86,7 +89,7 @@
             // 
             // vidTitle
             // 
-            this.vidTitle.Location = new System.Drawing.Point(9, 83);
+            this.vidTitle.Location = new System.Drawing.Point(9, 108);
             this.vidTitle.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.vidTitle.Name = "vidTitle";
             this.vidTitle.Size = new System.Drawing.Size(390, 23);
@@ -96,7 +99,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(368, 93);
+            this.label2.Location = new System.Drawing.Point(346, 158);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(66, 13);
@@ -106,7 +109,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(9, 22);
+            this.label3.Location = new System.Drawing.Point(9, 33);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(75, 13);
@@ -118,7 +121,7 @@
             this.mediaTypeBox.Controls.Add(this.radioButton3);
             this.mediaTypeBox.Controls.Add(this.radioButton2);
             this.mediaTypeBox.Controls.Add(this.radioButton1);
-            this.mediaTypeBox.Location = new System.Drawing.Point(371, 109);
+            this.mediaTypeBox.Location = new System.Drawing.Point(349, 174);
             this.mediaTypeBox.Name = "mediaTypeBox";
             this.mediaTypeBox.Size = new System.Drawing.Size(78, 79);
             this.mediaTypeBox.TabIndex = 10;
@@ -158,37 +161,55 @@
             this.radioButton1.Text = "mp3";
             this.radioButton1.UseVisualStyleBackColor = true;
             // 
-            // checkInternet
+            // menuStrip1
             // 
-            this.checkInternet.Location = new System.Drawing.Point(403, 316);
-            this.checkInternet.Name = "checkInternet";
-            this.checkInternet.Size = new System.Drawing.Size(91, 23);
-            this.checkInternet.TabIndex = 11;
-            this.checkInternet.Text = "Check Internet";
-            this.checkInternet.UseVisualStyleBackColor = true;
-            this.checkInternet.Click += new System.EventHandler(this.checkConn);
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.settingsToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(467, 24);
+            this.menuStrip1.TabIndex = 12;
+            this.menuStrip1.Text = "menuStrip1";
             // 
-            // Form1
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.checkConnectionToolStripMenuItem});
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            // 
+            // checkConnectionToolStripMenuItem
+            // 
+            this.checkConnectionToolStripMenuItem.Name = "checkConnectionToolStripMenuItem";
+            this.checkConnectionToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.checkConnectionToolStripMenuItem.Text = "Check Connection";
+            this.checkConnectionToolStripMenuItem.Click += new System.EventHandler(this.checkConn);
+            // 
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(554, 351);
-            this.Controls.Add(this.checkInternet);
+            this.ClientSize = new System.Drawing.Size(467, 342);
             this.Controls.Add(this.mediaTypeBox);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.vidTitle);
             this.Controls.Add(this.videoThumbNail);
-            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.downloadStat);
             this.Controls.Add(this.selectVideo);
             this.Controls.Add(this.urlBox);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "MainForm";
+            this.Text = " DLTuber";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.videoThumbNail)).EndInit();
             this.mediaTypeBox.ResumeLayout(false);
             this.mediaTypeBox.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -198,7 +219,7 @@
 
         private System.Windows.Forms.TextBox urlBox;
         private System.Windows.Forms.Button selectVideo;
-        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.ProgressBar downloadStat;
         private System.Windows.Forms.PictureBox videoThumbNail;
         private System.Windows.Forms.Label vidTitle;
         private System.Windows.Forms.Label label2;
@@ -208,7 +229,9 @@
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.SaveFileDialog fileLocationDialog;
-        private System.Windows.Forms.Button checkInternet;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem checkConnectionToolStripMenuItem;
     }
 }
 

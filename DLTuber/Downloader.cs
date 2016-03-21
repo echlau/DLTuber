@@ -39,7 +39,7 @@ namespace DLTuber
              */
             var videoDownloader = new VideoDownloader(video, dir);
             // Register the ProgressChanged event and print the current progress
-            videoDownloader.DownloadProgressChanged += (sender, args) => progressBar1.Value = (int)(args.ProgressPercentage * 0.85);
+            videoDownloader.DownloadProgressChanged += (sender, args) => progressBar1.Invoke((Action)(() => { progressBar1.Value = (int)(args.ProgressPercentage); }));
 
             /*
              * Execute the video downloader.
@@ -69,8 +69,9 @@ namespace DLTuber
                     DownloadUrlResolver.DecryptDownloadUrl(video);
                 }
                 var audioDownloader = new AudioDownloader(video, path);
-                audioDownloader.DownloadProgressChanged += (sender, args) => progressBar1.Value = (int)(args.ProgressPercentage * 0.85);
-                audioDownloader.AudioExtractionProgressChanged += (sender, args) => progressBar1.Value = (int)(85 + args.ProgressPercentage * 0.15);
+                audioDownloader.DownloadProgressChanged += (sender, args) => progressBar1.Invoke((Action)(() => { progressBar1.Value = (int)(args.ProgressPercentage * 0.85); })); 
+                //audioDownloader.DownloadProgressChanged += (sender, args) => progressBar1.Value = (int)(args.ProgressPercentage * 0.85);
+                audioDownloader.AudioExtractionProgressChanged += (sender, args) => progressBar1.Invoke((Action)(() => { progressBar1.Value = (int)(85 + args.ProgressPercentage * 0.15); }));
 
                 audioDownloader.Execute();
             }

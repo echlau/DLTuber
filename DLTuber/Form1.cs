@@ -13,6 +13,7 @@ namespace DLTuber
         private const string ERR_MSSG = "DLTuber has failed to sense an active internet connection," + 
                                   "you can still use DLTuber but some features may not be available";
         private InternetConnection conn;
+
         public MainForm()
         {
             InitializeComponent();
@@ -57,7 +58,10 @@ namespace DLTuber
             try
             {
                 title = GetTitle(url);
-                vidTitle.Text = "Title: " + title;
+                if(vidTitle.InvokeRequired)
+                {
+                    vidTitle.BeginInvoke((MethodInvoker)delegate() { vidTitle.Text = "Title: " + title;}); 
+                }                
                 videoThumbNail.Load("https://i.ytimg.com/vi/" + url + "/mqdefault.jpg");
             } 
             catch(WebException e)
@@ -78,6 +82,7 @@ namespace DLTuber
                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private string openFileLocation(string fType)
         {
             string dir = " "; 
@@ -94,8 +99,7 @@ namespace DLTuber
                     break;
             }
             if(fileLocationDialog.ShowDialog() == DialogResult.OK)
-            {
-                
+            {        
                 dir = fileLocationDialog.FileName; 
             }
             return dir; 
@@ -116,9 +120,11 @@ namespace DLTuber
                 Button b = (Button)sender;
                 string url = urlBox.Text;
                 Thread downloadThread = new Thread(() => RunDownload(url));
+                downloadThread.SetApartmentState(ApartmentState.STA); 
                 downloadThread.Start(); 
             }
         }
+        
         private void RunDownload(string url)
         {
             if (isValidUrl(url))

@@ -6,15 +6,32 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using YoutubeExtractor;
-
+/// <summary>
+/// Author: Manish Mallavarapu, Eric Lau 
+/// Updated: 03/18/2016, by Manish Mallavarapu
+/// </summary>
 namespace DLTuber
 {
+    /// <summary>
+    /// This class Downloads YouTube videos in the specified formats
+    /// </summary>
     class Downloader
     {
+        /// <summary>
+        /// Private constructor to prevent instantiation
+        /// Singleton pattern
+        /// </summary>
         private Downloader()
         {
          
         }
+        /// <summary>
+        /// Downloads the YouTube video to a .mp4 errors
+        /// </summary>
+        /// <param name="v"></param>
+        /// <param name="url"></param>
+        /// <param name="dir"></param>
+        /// <param name="progressBar1"></param>
         public static void downloadVideo(string v, string url, string dir,ProgressBar progressBar1)
         {
             IEnumerable<VideoInfo> videoInfos = DownloadUrlResolver.GetDownloadUrls(url);
@@ -57,7 +74,15 @@ namespace DLTuber
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        public static void downloadAudio(string type, string url, string path,ProgressBar progressBar1, ProgressBar childprogress)
+        /// <summary>
+        ///  Downloads the YouTube video to a .mp3 format
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="url"></param>
+        /// <param name="path"></param>
+        /// <param name="progressBar1"></param>
+        /// <param name="progressBar"></param>
+        public static void downloadAudio(string type, string url, string path,ProgressBar progressBar)
         {
             if (path != " ")
             {
@@ -72,8 +97,8 @@ namespace DLTuber
                 
                 //audioDownloader.DownloadProgressChanged += (sender, args) => progressBar1.Invoke((Action)(() => { progressBar1.Value = (int)(args.ProgressPercentage * 0.85); })); 
                 //audioDownloader.AudioExtractionProgressChanged += (sender, args) => progressBar1.Invoke((Action)(() => { progressBar1.Value = (int)(85 + args.ProgressPercentage * 0.15); }));
-                audioDownloader.DownloadProgressChanged += (sender, args) => childprogress.Invoke((Action)(() => { childprogress.Value = (int)(args.ProgressPercentage * 0.85); }));
-                audioDownloader.AudioExtractionProgressChanged += (sender, args) => childprogress.Invoke((Action)(() => { childprogress.Value = (int)(85 + args.ProgressPercentage * 0.15); }));
+                audioDownloader.DownloadProgressChanged += (sender, args) => progressBar.Invoke((Action)(() => { progressBar.Value = (int)(args.ProgressPercentage * 0.85); }));
+                audioDownloader.AudioExtractionProgressChanged += (sender, args) => progressBar.Invoke((Action)(() => { progressBar.Value = (int)(85 + args.ProgressPercentage * 0.15); }));
 
                 audioDownloader.Execute();
             }

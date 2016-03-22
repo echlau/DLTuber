@@ -6,8 +6,10 @@ using System.Web;
 using System.Threading;
 /// <summary>
 /// Author: Manish Mallavarapu, Eric Lau
-/// Last update: 3/22/2016, Eric Lau
+/// Last update: 3/22/2016, by Eric Lau
 /// Version: 1
+/// DLTuber uses Youtube Extractor, A DLL made by FlagBug
+/// Found at https://github.com/flagbug/YoutubeExtractor 
 /// </summary>
 namespace DLTuber
 {
@@ -158,9 +160,10 @@ namespace DLTuber
                 selectVideo.Enabled = true;
                 Button b = (Button)sender;
                 string url = urlBox.Text;
+                //Creates a thread each time we download something
                 Thread downloadThread = new Thread(() => RunDownload(url));
                 downloadThread.SetApartmentState(ApartmentState.STA); 
-                downloadThread.Start(); 
+                downloadThread.Start(); //start the new thread
             }
         }
         
@@ -171,18 +174,18 @@ namespace DLTuber
                 loadThumbNail(url.Split('=')[1]);
                 string dir;
                 Form2 childForm = new Form2();
-                ProgressBar childprogress = childForm.getProgressBar();
+                ProgressBar progBar = childForm.getProgressBar();
                 childForm.Show();
                 childForm.setTitle(title);
                 if (radioButton1.Checked)
                 {
                     dir = openFileLocation("mp3");
-                    Downloader.downloadAudio("mp3", url, dir, downloadStat, childprogress);
+                    Downloader.downloadAudio("mp3", url, dir, progBar);
                 }
                 else if (radioButton2.Checked)
                 {
                     dir = openFileLocation("mp4");
-                    Downloader.downloadVideo("mp4", url, dir, downloadStat);
+                    Downloader.downloadVideo("mp4", url, dir, progBar);
                 }
                 else
                 {

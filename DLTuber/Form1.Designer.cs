@@ -30,7 +30,6 @@
         {
             this.urlBox = new System.Windows.Forms.TextBox();
             this.selectVideo = new System.Windows.Forms.Button();
-            this.downloadStat = new System.Windows.Forms.ProgressBar();
             this.videoThumbNail = new System.Windows.Forms.PictureBox();
             this.vidTitle = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -67,15 +66,6 @@
             this.selectVideo.Text = "Download ";
             this.selectVideo.UseVisualStyleBackColor = true;
             this.selectVideo.Click += new System.EventHandler(this.handleVideoClick);
-            // 
-            // downloadStat
-            // 
-            this.downloadStat.Location = new System.Drawing.Point(12, 317);
-            this.downloadStat.Margin = new System.Windows.Forms.Padding(2);
-            this.downloadStat.Name = "downloadStat";
-            this.downloadStat.Size = new System.Drawing.Size(320, 19);
-            this.downloadStat.Step = 1;
-            this.downloadStat.TabIndex = 2;
             // 
             // videoThumbNail
             // 
@@ -196,7 +186,6 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.vidTitle);
             this.Controls.Add(this.videoThumbNail);
-            this.Controls.Add(this.downloadStat);
             this.Controls.Add(this.selectVideo);
             this.Controls.Add(this.urlBox);
             this.Controls.Add(this.menuStrip1);
@@ -219,7 +208,6 @@
 
         private System.Windows.Forms.TextBox urlBox;
         private System.Windows.Forms.Button selectVideo;
-        private System.Windows.Forms.ProgressBar downloadStat;
         private System.Windows.Forms.PictureBox videoThumbNail;
         private System.Windows.Forms.Label vidTitle;
         private System.Windows.Forms.Label label2;

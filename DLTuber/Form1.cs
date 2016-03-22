@@ -4,9 +4,16 @@ using System.Net;
 using System.Collections.Specialized;
 using System.Web;
 using System.Threading;
-
+/// <summary>
+/// Author: Manish Mallavarapu, Eric Lau
+/// Last update: 3/22/2016, Eric Lau
+/// Version: 1
+/// </summary>
 namespace DLTuber
 {
+    /// <summary>
+    /// Start of program, Creates global variables and loads form
+    /// </summary>
     public partial class MainForm : Form
     {
         private string title;
@@ -18,6 +25,11 @@ namespace DLTuber
         {
             InitializeComponent();
         }
+        /// <summary>
+        /// On Form load, check for internet connection before continuing
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Form1_Load(object sender, EventArgs e)
         {
             conn = new InternetConnection();
@@ -28,10 +40,20 @@ namespace DLTuber
                 selectVideo.Enabled = false;
             }   
         }
+        /// <summary>
+        /// Returns true if internet is available
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
         private bool isConnected(InternetConnection c)
         {
             return c.connected() ? true : false; 
         }
+        /// <summary>
+        /// Returns true if URL is a valid YouTube URL
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
         private bool isValidUrl(string url)
         {            
             bool flag = false; 
@@ -53,6 +75,10 @@ namespace DLTuber
             }
             return flag; 
         }
+        /// <summary>
+        /// Loads thumbnail and video title onto pictureBox
+        /// </summary>
+        /// <param name="url"></param>
         private void loadThumbNail(string url)
         {
             try
@@ -70,6 +96,11 @@ namespace DLTuber
             }
             
         }
+        /// <summary>
+        /// Checks if there is an open connection
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void checkConn(object sender, EventArgs e)
         {
             if(conn.connected())
@@ -82,7 +113,11 @@ namespace DLTuber
                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        /// <summary>
+        /// Opens File dialog to get desired save spot from user
+        /// </summary>
+        /// <param name="fType"></param>
+        /// <returns></returns>
         private string openFileLocation(string fType)
         {
             string dir = " "; 
@@ -104,7 +139,11 @@ namespace DLTuber
             }
             return dir; 
         }
-       
+       /// <summary>
+       /// 
+       /// </summary>
+       /// <param name="sender"></param>
+       /// <param name="e"></param>
         private void handleVideoClick(object sender, EventArgs e)
         {
             if (!conn.connected())
@@ -131,15 +170,19 @@ namespace DLTuber
             {
                 loadThumbNail(url.Split('=')[1]);
                 string dir;
+                Form2 childForm = new Form2();
+                ProgressBar childprogress = childForm.getProgressBar();
+                childForm.Show();
+                childForm.setTitle(title);
                 if (radioButton1.Checked)
                 {
                     dir = openFileLocation("mp3");
-                    Downloader.downloadAudio("mp3", url, dir,downloadStat);
+                    Downloader.downloadAudio("mp3", url, dir, downloadStat, childprogress);
                 }
                 else if (radioButton2.Checked)
                 {
                     dir = openFileLocation("mp4");
-                    Downloader.downloadVideo("mp4", url, dir,downloadStat);
+                    Downloader.downloadVideo("mp4", url, dir, downloadStat);
                 }
                 else
                 {

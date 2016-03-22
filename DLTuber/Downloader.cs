@@ -57,7 +57,7 @@ namespace DLTuber
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        public static void downloadAudio(string type, string url, string path,ProgressBar progressBar1)
+        public static void downloadAudio(string type, string url, string path,ProgressBar progressBar1, ProgressBar childprogress)
         {
             if (path != " ")
             {
@@ -69,9 +69,11 @@ namespace DLTuber
                     DownloadUrlResolver.DecryptDownloadUrl(video);
                 }
                 var audioDownloader = new AudioDownloader(video, path);
-                audioDownloader.DownloadProgressChanged += (sender, args) => progressBar1.Invoke((Action)(() => { progressBar1.Value = (int)(args.ProgressPercentage * 0.85); })); 
-                //audioDownloader.DownloadProgressChanged += (sender, args) => progressBar1.Value = (int)(args.ProgressPercentage * 0.85);
-                audioDownloader.AudioExtractionProgressChanged += (sender, args) => progressBar1.Invoke((Action)(() => { progressBar1.Value = (int)(85 + args.ProgressPercentage * 0.15); }));
+                
+                //audioDownloader.DownloadProgressChanged += (sender, args) => progressBar1.Invoke((Action)(() => { progressBar1.Value = (int)(args.ProgressPercentage * 0.85); })); 
+                //audioDownloader.AudioExtractionProgressChanged += (sender, args) => progressBar1.Invoke((Action)(() => { progressBar1.Value = (int)(85 + args.ProgressPercentage * 0.15); }));
+                audioDownloader.DownloadProgressChanged += (sender, args) => childprogress.Invoke((Action)(() => { childprogress.Value = (int)(args.ProgressPercentage * 0.85); }));
+                audioDownloader.AudioExtractionProgressChanged += (sender, args) => childprogress.Invoke((Action)(() => { childprogress.Value = (int)(85 + args.ProgressPercentage * 0.15); }));
 
                 audioDownloader.Execute();
             }

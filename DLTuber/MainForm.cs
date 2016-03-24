@@ -173,16 +173,16 @@ namespace DLTuber
             {
                 loadThumbNail(url.Split('=')[1]);
                 string dir;
-                Form2 childForm = new Form2();
+                FormStatus childForm = new FormStatus();
                 ProgressBar progBar = childForm.getProgressBar();
-                childForm.Show();
                 childForm.setTitle(title);
-                if (radioButton1.Checked)
+                childForm.Show();
+                if (mp3RadioBtn.Checked)
                 {
                     dir = openFileLocation("mp3");
-                    Downloader.downloadAudio("mp3", url, dir, progBar);
+                    Downloader.downloadAudio("mp3", url, dir, progBar);             
                 }
-                else if (radioButton2.Checked)
+                else if (mp4RadioBtn.Checked)
                 {
                     dir = openFileLocation("mp4");
                     Downloader.downloadVideo("mp4", url, dir, progBar);

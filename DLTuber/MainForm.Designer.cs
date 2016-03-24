@@ -35,9 +35,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.mediaTypeBox = new System.Windows.Forms.GroupBox();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.wavRadioBtn = new System.Windows.Forms.RadioButton();
+            this.mp4RadioBtn = new System.Windows.Forms.RadioButton();
+            this.mp3RadioBtn = new System.Windows.Forms.RadioButton();
             this.fileLocationDialog = new System.Windows.Forms.SaveFileDialog();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -108,48 +108,48 @@
             // 
             // mediaTypeBox
             // 
-            this.mediaTypeBox.Controls.Add(this.radioButton3);
-            this.mediaTypeBox.Controls.Add(this.radioButton2);
-            this.mediaTypeBox.Controls.Add(this.radioButton1);
+            this.mediaTypeBox.Controls.Add(this.wavRadioBtn);
+            this.mediaTypeBox.Controls.Add(this.mp4RadioBtn);
+            this.mediaTypeBox.Controls.Add(this.mp3RadioBtn);
             this.mediaTypeBox.Location = new System.Drawing.Point(349, 174);
             this.mediaTypeBox.Name = "mediaTypeBox";
             this.mediaTypeBox.Size = new System.Drawing.Size(78, 79);
             this.mediaTypeBox.TabIndex = 10;
             this.mediaTypeBox.TabStop = false;
             // 
-            // radioButton3
+            // wavRadioBtn
             // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(18, 55);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(45, 17);
-            this.radioButton3.TabIndex = 2;
-            this.radioButton3.TabStop = true;
-            this.radioButton3.Text = "wav";
-            this.radioButton3.UseVisualStyleBackColor = true;
+            this.wavRadioBtn.AutoSize = true;
+            this.wavRadioBtn.Location = new System.Drawing.Point(18, 55);
+            this.wavRadioBtn.Name = "wavRadioBtn";
+            this.wavRadioBtn.Size = new System.Drawing.Size(45, 17);
+            this.wavRadioBtn.TabIndex = 2;
+            this.wavRadioBtn.TabStop = true;
+            this.wavRadioBtn.Text = "wav";
+            this.wavRadioBtn.UseVisualStyleBackColor = true;
             // 
-            // radioButton2
+            // mp4RadioBtn
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(18, 32);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(45, 17);
-            this.radioButton2.TabIndex = 1;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "mp4";
-            this.radioButton2.UseVisualStyleBackColor = true;
+            this.mp4RadioBtn.AutoSize = true;
+            this.mp4RadioBtn.Location = new System.Drawing.Point(18, 32);
+            this.mp4RadioBtn.Name = "mp4RadioBtn";
+            this.mp4RadioBtn.Size = new System.Drawing.Size(45, 17);
+            this.mp4RadioBtn.TabIndex = 1;
+            this.mp4RadioBtn.TabStop = true;
+            this.mp4RadioBtn.Text = "mp4";
+            this.mp4RadioBtn.UseVisualStyleBackColor = true;
             // 
-            // radioButton1
+            // mp3RadioBtn
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Checked = true;
-            this.radioButton1.Location = new System.Drawing.Point(18, 9);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(45, 17);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "mp3";
-            this.radioButton1.UseVisualStyleBackColor = true;
+            this.mp3RadioBtn.AutoSize = true;
+            this.mp3RadioBtn.Checked = true;
+            this.mp3RadioBtn.Location = new System.Drawing.Point(18, 9);
+            this.mp3RadioBtn.Name = "mp3RadioBtn";
+            this.mp3RadioBtn.Size = new System.Drawing.Size(45, 17);
+            this.mp3RadioBtn.TabIndex = 0;
+            this.mp3RadioBtn.TabStop = true;
+            this.mp3RadioBtn.Text = "mp3";
+            this.mp3RadioBtn.UseVisualStyleBackColor = true;
             // 
             // menuStrip1
             // 
@@ -213,9 +213,9 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.GroupBox mediaTypeBox;
-        private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.RadioButton wavRadioBtn;
+        private System.Windows.Forms.RadioButton mp4RadioBtn;
+        private System.Windows.Forms.RadioButton mp3RadioBtn;
         private System.Windows.Forms.SaveFileDialog fileLocationDialog;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;

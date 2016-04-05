@@ -6,7 +6,7 @@ using System.Web;
 using System.Threading;
 /// <summary>
 /// Author: Manish Mallavarapu, Eric Lau
-/// Last update: 3/22/2016, by Eric Lau
+/// Last update: 4/4/2016, by Manish Mallavarapu
 /// Version: 1
 /// DLTuber uses Youtube Extractor, A DLL made by FlagBug
 /// Found at https://github.com/flagbug/YoutubeExtractor 
@@ -22,10 +22,13 @@ namespace DLTuber
         private const string ERR_MSSG = "DLTuber has failed to sense an active internet connection," + 
                                   "you can still use DLTuber but some features may not be available";
         private InternetConnection conn;
-
+        /// <summary>
+        /// The constructor, program starts from here
+        /// </summary>
         public MainForm()
         {
             InitializeComponent();
+            FormBorderStyle = FormBorderStyle.FixedDialog;
         }
         /// <summary>
         /// On Form load, check for internet connection before continuing
@@ -111,6 +114,7 @@ namespace DLTuber
             }
             else
             {
+               selectVideo.Enabled = false;
                MessageBox.Show("DLTuber does not sense an internet connection", "No Internet Connection",
                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -142,7 +146,7 @@ namespace DLTuber
             return dir; 
         }
        /// <summary>
-       /// 
+       /// Gets the preferred format of video from the user
        /// </summary>
        /// <param name="sender"></param>
        /// <param name="e"></param>
@@ -160,32 +164,39 @@ namespace DLTuber
                 selectVideo.Enabled = true;
                 Button b = (Button)sender;
                 string url = urlBox.Text;
-                //Creates a thread each time we download something
-                Thread downloadThread = new Thread(() => RunDownload(url));
-                downloadThread.SetApartmentState(ApartmentState.STA); 
-                downloadThread.Start(); //start the new thread
+                RunDownload(url); 
             }
         }
-        
+        /// <summary>
+        /// Creates a new form to show download percentage 
+        /// </summary>
+        /// <param name="url"></param>
         private void RunDownload(string url)
         {
             if (isValidUrl(url))
             {
                 loadThumbNail(url.Split('=')[1]);
                 string dir;
+                string title = GetTitle(url);
+                vidTitle.Text = "Title: " + title; 
                 FormStatus childForm = new FormStatus();
                 ProgressBar progBar = childForm.getProgressBar();
-                childForm.setTitle(title);
-                childForm.Show();
+                childForm.setTitle(title); 
                 if (mp3RadioBtn.Checked)
                 {
                     dir = openFileLocation("mp3");
-                    Downloader.downloadAudio("mp3", url, dir, progBar);             
+                    childForm.Show();
+                    Thread audioThread = new Thread(() => Downloader.startDownloadAudioThread("mp3", url, dir, ref progBar));
+                    audioThread.SetApartmentState(ApartmentState.STA); 
+                    audioThread.Start();      
                 }
                 else if (mp4RadioBtn.Checked)
                 {
                     dir = openFileLocation("mp4");
-                    Downloader.downloadVideo("mp4", url, dir, progBar);
+                    childForm.Show();
+                    Thread videoThread = new Thread(() => Downloader.startDownloadVideoThread("mp3", url, dir, ref progBar));
+                    videoThread.SetApartmentState(ApartmentState.STA);
+                    videoThread.Start();
                 }
                 else
                 {
@@ -193,6 +204,12 @@ namespace DLTuber
                 }
             }
         }
+ 
+        /// <summary>
+        /// Gets Title of the video from the web through the URL 
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
         public string GetTitle(string url)  
         {
             WebClient client = new WebClient();
@@ -210,7 +227,7 @@ namespace DLTuber
                 NameValueCollection nvcArgs = HttpUtility.ParseQueryString(querystring);
                 return nvcArgs[key];
             }
-            return string.Empty; // or throw an error
+            return "Not Available"; 
         }
     }
 }

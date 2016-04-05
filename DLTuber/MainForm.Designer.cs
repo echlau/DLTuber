@@ -79,7 +79,7 @@
             // 
             // vidTitle
             // 
-            this.vidTitle.Location = new System.Drawing.Point(9, 108);
+            this.vidTitle.Location = new System.Drawing.Point(6, 108);
             this.vidTitle.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.vidTitle.Name = "vidTitle";
             this.vidTitle.Size = new System.Drawing.Size(390, 23);

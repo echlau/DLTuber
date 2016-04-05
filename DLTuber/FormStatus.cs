@@ -1,40 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using System.Net.NetworkInformation;
+/// <summary>
+/// Author: Manish Mallavarapu, Eric Lau
+/// Updated: 04/04/2016, by Manish Mallavarapu 
+/// </summary>
 namespace DLTuber
 {
     public partial class FormStatus : Form
     {
+        
         public FormStatus()
         {
             InitializeComponent();
-            NetworkChange.NetworkAvailabilityChanged += AvailabilityChanged; 
+            NetworkChange.NetworkAvailabilityChanged += AvailabilityChanged;
+            FormBorderStyle = FormBorderStyle.FixedDialog;
         }
-
+           
         public ProgressBar getProgressBar()
         {
-            return progressBar1;
+            return statusBar; 
         }
-        public void setTitle(String title)
+        public void setTitle(string title)
         {
-            label1.Text = "Title: " + title;
-        }
-        private void cancelDownload(object sender, EventArgs e)
-        {
-          
+            vidTitle.Text = "Title: " + title;
         }
         private void AvailabilityChanged(object sender, NetworkAvailabilityEventArgs e)
         {
-            MessageBox.Show("A problem occured while downloading your video, please check the internet and reset DLTuber"
+            MessageBox.Show("A problem occured while downloading your video, please check the internet and try again"
                             ,"No Internet Connection",MessageBoxButtons.OK
-                            , MessageBoxIcon.Error); 
+                            , MessageBoxIcon.Error);
         }
     }
 }

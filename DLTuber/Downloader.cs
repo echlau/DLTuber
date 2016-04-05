@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using YoutubeExtractor;
 /// <summary>
 /// Author: Manish Mallavarapu, Eric Lau 
-/// Updated: 03/18/2016, by Manish Mallavarapu
+/// Updated: 04/04/2016, by Manish Mallavarapu
 /// </summary>
 namespace DLTuber
 {
@@ -17,52 +16,164 @@ namespace DLTuber
     /// </summary>
     class Downloader
     {
+        private static string v_;
+        private static string url_;
+        private static string dir_;
+        private static ProgressBar progBar_;
+        private static AudioDownloader audioDownloader_; 
         /// <summary>
         /// Private constructor to prevent instantiation
         /// Singleton pattern
         /// </summary>
         private Downloader()
         {
-         
+            
         }
         /// <summary>
-        /// Downloads the YouTube video to a .mp4 errors
+        /// Creates a background worker to download in video format
+        /// </summary>
+        /// <param name="v"></param>
+        /// <param name="url"></param>
+        /// <param name="dir"></param>
+        /// <param name="progressBar"></param>
+        public static void startDownloadVideoThread(string v, string url, string dir,ref ProgressBar progressBar)
+        {
+            v_ = v;
+            url_ = url;
+            dir_ = dir;
+            progBar_ = progressBar;
+            BackgroundWorker videodl = new BackgroundWorker();
+            videodl.DoWork += bw_downloadVideo;
+            videodl.ProgressChanged += bw_updateProgressBar;
+            videodl.WorkerReportsProgress = true;
+            if (!videodl.IsBusy)
+            {
+                videodl.RunWorkerAsync();
+            }
+        }
+        /// <summary>
+        /// Creates a background worker to download audio 
+        /// </summary>
+        /// <param name="v"></param>
+        /// <param name="url"></param>
+        /// <param name="dir"></param>
+        /// <param name="progressBar"></param>
+        public static void startDownloadAudioThread(string v, string url, string dir,ref ProgressBar progressBar)
+        {
+            v_ = v;
+            url_ = url;
+            dir_ = dir;
+            progBar_ = progressBar; 
+            BackgroundWorker audiodl = new BackgroundWorker();
+            audiodl.DoWork += bw_downloadAudio;
+            audiodl.ProgressChanged += bw_updateProgressBar;
+            audiodl.WorkerReportsProgress = true; 
+            if (!audiodl.IsBusy)
+            {
+                audiodl.RunWorkerAsync();
+            }
+        }
+        private static void bw_downloadAudio(object send, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = send as BackgroundWorker;
+            if (dir_ != " ")
+            {
+                //Parameter for video type
+                IEnumerable<VideoInfo> videoInfos = DownloadUrlResolver.GetDownloadUrls(url_);
+                VideoInfo video = videoInfos.Where(info => info.CanExtractAudio).OrderByDescending(info => info.AudioBitrate).First();
+                if (video.RequiresDecryption)
+                {
+                    DownloadUrlResolver.DecryptDownloadUrl(video);
+                }
+                audioDownloader_ = new AudioDownloader(video, dir_);
+                audioDownloader_.AudioExtractionProgressChanged += (sender, args) => progBar_.Invoke((Action)(() => { worker.ReportProgress((int)(85 + args.ProgressPercentage * 0.15)); }));
+                try
+                {
+                    audioDownloader_.Execute();
+                }
+                catch (WebException we)
+                {
+                    MessageBox.Show("The video returned an error, please try again later",
+                                     we.Response.ToString(),
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+        private static void bw_downloadVideo(object send, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = send as BackgroundWorker;
+            if (dir_ != " ")
+            {
+                IEnumerable<VideoInfo> videoInfos = DownloadUrlResolver.GetDownloadUrls(url_);
+                //Select the first .mp4 video with 360p resolution
+                VideoInfo video = videoInfos.First(info => info.VideoType == VideoType.Mp4 && info.Resolution == 360);
+                //If the video has a decrypted signature, decipher it
+                if (video.RequiresDecryption)
+                {
+                    DownloadUrlResolver.DecryptDownloadUrl(video);
+                }
+                /*
+                  Create the video downloader.
+                  The first argument is the video to download.
+                  The second argument is the path to save the video file.
+                 */
+                var videoDownloader = new VideoDownloader(video, dir_);
+                // Register the ProgressChanged event and print the current progress
+                videoDownloader.DownloadProgressChanged += (sender, args) => progBar_.Invoke((Action)(() => {worker.ReportProgress((int)(args.ProgressPercentage)); }));
+                /*
+                  Execute the video downloader.
+                  For GUI applications note, that this method runs synchronously.
+                 */
+                try
+                {
+                    videoDownloader.Execute();
+                }
+                catch (WebException we)
+                {
+                    MessageBox.Show("The video returned an error, please try again later",
+                                     we.Response.ToString(),
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        } 
+        private static void bw_updateProgressBar(object send, ProgressChangedEventArgs e)
+        {
+            progBar_.Invoke(new Action(() => { progBar_.Value = e.ProgressPercentage; })); 
+        }
+        /// <summary>
+        /// Downloads the YouTube video to a .mp4 format
         /// </summary>
         /// <param name="v"></param>
         /// <param name="url"></param>
         /// <param name="dir"></param>
         /// <param name="progressBar1"></param>
-        public static void downloadVideo(string v, string url, string dir,ProgressBar progressBar1)
+        private static void downloadVideo(ref string v, ref string url, ref string dir, ProgressBar progressBar1)
         {
+
             IEnumerable<VideoInfo> videoInfos = DownloadUrlResolver.GetDownloadUrls(url);
-            /*
-            * Select the first .mp4 video with 360p resolution
-            */
+            //Select the first .mp4 video with 360p resolution
             VideoInfo video = videoInfos
                 .First(info => info.VideoType == VideoType.Mp4 && info.Resolution == 360);
 
-            /*
-             * If the video has a decrypted signature, decipher it
-             */
+            //If the video has a decrypted signature, decipher it
             if (video.RequiresDecryption)
             {
                 DownloadUrlResolver.DecryptDownloadUrl(video);
             }
 
-            /*
-             * Create the video downloader.
-             * The first argument is the video to download.
-             * The second argument is the path to save the video file.
-             */
+           /*
+             Create the video downloader.
+             The first argument is the video to download.
+             The second argument is the path to save the video file.
+            */
             var videoDownloader = new VideoDownloader(video, dir);
             // Register the ProgressChanged event and print the current progress
             videoDownloader.DownloadProgressChanged += (sender, args) => progressBar1.Invoke((Action)(() => { progressBar1.Value = (int)(args.ProgressPercentage); }));
 
             /*
-             * Execute the video downloader.
-             * For GUI applications note, that this method runs synchronously.
+              Execute the video downloader.
+              For GUI applications note, that this method runs synchronously.
              */
-
             try
             {
                 videoDownloader.Execute();
@@ -82,7 +193,7 @@ namespace DLTuber
         /// <param name="path"></param>
         /// <param name="progressBar1"></param>
         /// <param name="progressBar"></param>
-        public static void downloadAudio(string type, string url, string path,ProgressBar progressBar)
+        private static void downloadAudio(ref string type, ref string url, ref string path,ProgressBar progressBar)
         {
             if (path != " ")
             {
@@ -93,15 +204,12 @@ namespace DLTuber
                 {
                     DownloadUrlResolver.DecryptDownloadUrl(video);
                 }
-                var audioDownloader = new AudioDownloader(video, path);
-                
-                //audioDownloader.DownloadProgressChanged += (sender, args) => progressBar1.Invoke((Action)(() => { progressBar1.Value = (int)(args.ProgressPercentage * 0.85); })); 
-                //audioDownloader.AudioExtractionProgressChanged += (sender, args) => progressBar1.Invoke((Action)(() => { progressBar1.Value = (int)(85 + args.ProgressPercentage * 0.15); }));
+                var audioDownloader = new AudioDownloader(video, path);    
                 audioDownloader.DownloadProgressChanged += (sender, args) => progressBar.Invoke((Action)(() => { progressBar.Value = (int)(args.ProgressPercentage * 0.85); }));
                 audioDownloader.AudioExtractionProgressChanged += (sender, args) => progressBar.Invoke((Action)(() => { progressBar.Value = (int)(85 + args.ProgressPercentage * 0.15); }));
-
                 audioDownloader.Execute();
             }
         }
+       
     }
 }

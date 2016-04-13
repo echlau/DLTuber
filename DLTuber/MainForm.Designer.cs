@@ -49,7 +49,8 @@
             // 
             // urlBox
             // 
-            this.urlBox.Location = new System.Drawing.Point(9, 58);
+            this.urlBox.BackColor = System.Drawing.SystemColors.Menu;
+            this.urlBox.Location = new System.Drawing.Point(12, 58);
             this.urlBox.Margin = new System.Windows.Forms.Padding(2);
             this.urlBox.Name = "urlBox";
             this.urlBox.Size = new System.Drawing.Size(282, 20);
@@ -58,7 +59,7 @@
             // 
             // selectVideo
             // 
-            this.selectVideo.Location = new System.Drawing.Point(215, 82);
+            this.selectVideo.Location = new System.Drawing.Point(218, 82);
             this.selectVideo.Margin = new System.Windows.Forms.Padding(2);
             this.selectVideo.Name = "selectVideo";
             this.selectVideo.Size = new System.Drawing.Size(76, 24);
@@ -70,7 +71,7 @@
             // videoThumbNail
             // 
             this.videoThumbNail.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.videoThumbNail.Location = new System.Drawing.Point(12, 133);
+            this.videoThumbNail.Location = new System.Drawing.Point(6, 151);
             this.videoThumbNail.Margin = new System.Windows.Forms.Padding(2);
             this.videoThumbNail.Name = "videoThumbNail";
             this.videoThumbNail.Size = new System.Drawing.Size(320, 180);
@@ -79,10 +80,12 @@
             // 
             // vidTitle
             // 
-            this.vidTitle.Location = new System.Drawing.Point(6, 108);
+            this.vidTitle.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.vidTitle.ForeColor = System.Drawing.SystemColors.InfoText;
+            this.vidTitle.Location = new System.Drawing.Point(3, 120);
             this.vidTitle.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.vidTitle.Name = "vidTitle";
-            this.vidTitle.Size = new System.Drawing.Size(390, 23);
+            this.vidTitle.Size = new System.Drawing.Size(390, 20);
             this.vidTitle.TabIndex = 4;
             this.vidTitle.Text = "Title";
             // 
@@ -99,7 +102,8 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(9, 33);
+            this.label3.BackColor = System.Drawing.SystemColors.MenuBar;
+            this.label3.Location = new System.Drawing.Point(11, 34);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(75, 13);
@@ -191,6 +195,9 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(2);
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(469, 381);
+            this.MinimumSize = new System.Drawing.Size(469, 381);
             this.Name = "MainForm";
             this.Text = " DLTuber";
             this.Load += new System.EventHandler(this.Form1_Load);

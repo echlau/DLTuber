@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Windows.Forms;
 using YoutubeExtractor;
 /// <summary>
@@ -20,7 +21,12 @@ namespace DLTuber
         private static string url_;
         private static string dir_;
         private static ProgressBar progBar_;
-        private static AudioDownloader audioDownloader_; 
+        private static AudioDownloader audioDownloader_;
+        private static BackgroundWorker audiodl;
+        private static FormStatus childForm_; 
+        private static BackgroundWorker videodl;
+        private static bool isAudio_;
+        private static bool isVideo_; 
         /// <summary>
         /// Private constructor to prevent instantiation
         /// Singleton pattern
@@ -36,20 +42,27 @@ namespace DLTuber
         /// <param name="url"></param>
         /// <param name="dir"></param>
         /// <param name="progressBar"></param>
-        public static void startDownloadVideoThread(string v, string url, string dir,ref ProgressBar progressBar)
+        public static void startDownloadVideoThread(string v, string url, string dir,ref ProgressBar progressBar,ref FormStatus childForm)
         {
+            isVideo_ = false;
+            isAudio_ = true;
             v_ = v;
             url_ = url;
             dir_ = dir;
             progBar_ = progressBar;
-            BackgroundWorker videodl = new BackgroundWorker();
+            childForm_ = childForm;
+            videodl = new BackgroundWorker();
             videodl.DoWork += bw_downloadVideo;
             videodl.ProgressChanged += bw_updateProgressBar;
             videodl.WorkerReportsProgress = true;
+            videodl.WorkerSupportsCancellation = true;
+            Button cancelButton = childForm.CancelButton as Button;
+            //cancelButton.Click += cancelDownload;
             if (!videodl.IsBusy)
             {
                 videodl.RunWorkerAsync();
             }
+            
         }
         /// <summary>
         /// Creates a background worker to download audio 
@@ -58,29 +71,49 @@ namespace DLTuber
         /// <param name="url"></param>
         /// <param name="dir"></param>
         /// <param name="progressBar"></param>
-        public static void startDownloadAudioThread(string v, string url, string dir,ref ProgressBar progressBar)
+        public static void startDownloadAudioThread(string v, string url, string dir,ref ProgressBar progressBar,ref FormStatus childForm)
         {
+            isVideo_ = false;
+            isAudio_ = true; 
             v_ = v;
             url_ = url;
             dir_ = dir;
+            childForm_ = childForm;
             progBar_ = progressBar; 
-            BackgroundWorker audiodl = new BackgroundWorker();
+            audiodl = new BackgroundWorker();
             audiodl.DoWork += bw_downloadAudio;
             audiodl.ProgressChanged += bw_updateProgressBar;
-            audiodl.WorkerReportsProgress = true; 
+            audiodl.WorkerReportsProgress = true;
+            audiodl.WorkerSupportsCancellation = true;
+            Button cancelButton = childForm.CancelButton as Button;
+            //cancelButton.Click += cancelDownload;
             if (!audiodl.IsBusy)
             {
                 audiodl.RunWorkerAsync();
             }
         }
+        private static void cancelDownload(object sender, EventArgs e)
+        {
+            if (isVideo_)
+            {
+                videodl.CancelAsync();
+            } 
+            else if(isAudio_)
+            {
+                audiodl.CancelAsync(); 
+            }
+        }
         private static void bw_downloadAudio(object send, DoWorkEventArgs e)
         {
+            isVideo_ = false;
+            isAudio_ = true; 
             BackgroundWorker worker = send as BackgroundWorker;
             if (dir_ != " ")
             {
                 //Parameter for video type
                 IEnumerable<VideoInfo> videoInfos = DownloadUrlResolver.GetDownloadUrls(url_);
                 VideoInfo video = videoInfos.Where(info => info.CanExtractAudio).OrderByDescending(info => info.AudioBitrate).First();
+                
                 if (video.RequiresDecryption)
                 {
                     DownloadUrlResolver.DecryptDownloadUrl(video);
@@ -106,7 +139,7 @@ namespace DLTuber
             {
                 IEnumerable<VideoInfo> videoInfos = DownloadUrlResolver.GetDownloadUrls(url_);
                 //Select the first .mp4 video with 360p resolution
-                VideoInfo video = videoInfos.First(info => info.VideoType == VideoType.Mp4 && info.Resolution == 360);
+                VideoInfo video = videoInfos.First(info => info.VideoType == VideoType.Mp4 );
                 //If the video has a decrypted signature, decipher it
                 if (video.RequiresDecryption)
                 {
@@ -199,6 +232,7 @@ namespace DLTuber
             {
                 //Parameter for video type
                 IEnumerable<VideoInfo> videoInfos = DownloadUrlResolver.GetDownloadUrls(url);
+                
                 VideoInfo video = videoInfos.Where(info => info.CanExtractAudio).OrderByDescending(info => info.AudioBitrate).First();
                 if (video.RequiresDecryption)
                 {

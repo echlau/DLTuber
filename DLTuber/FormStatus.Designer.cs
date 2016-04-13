@@ -35,25 +35,26 @@
             // 
             // statusBar
             // 
-            this.statusBar.Location = new System.Drawing.Point(21, 61);
+            this.statusBar.Location = new System.Drawing.Point(9, 57);
             this.statusBar.Margin = new System.Windows.Forms.Padding(2);
             this.statusBar.Name = "statusBar";
-            this.statusBar.Size = new System.Drawing.Size(281, 19);
+            this.statusBar.Size = new System.Drawing.Size(350, 19);
             this.statusBar.TabIndex = 0;
             // 
             // vidTitle
             // 
             this.vidTitle.AutoSize = true;
-            this.vidTitle.Location = new System.Drawing.Point(18, 23);
+            this.vidTitle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.vidTitle.Location = new System.Drawing.Point(11, 31);
             this.vidTitle.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.vidTitle.Name = "vidTitle";
-            this.vidTitle.Size = new System.Drawing.Size(30, 13);
+            this.vidTitle.Size = new System.Drawing.Size(32, 15);
             this.vidTitle.TabIndex = 1;
             this.vidTitle.Text = "Title:";
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(227, 94);
+            this.button1.Location = new System.Drawing.Point(284, 94);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 2;
@@ -64,7 +65,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(324, 129);
+            this.ClientSize = new System.Drawing.Size(370, 129);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.vidTitle);
             this.Controls.Add(this.statusBar);

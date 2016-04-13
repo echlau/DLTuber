@@ -28,7 +28,6 @@ namespace DLTuber
         public MainForm()
         {
             InitializeComponent();
-            FormBorderStyle = FormBorderStyle.FixedDialog;
         }
         /// <summary>
         /// On Form load, check for internet connection before continuing
@@ -92,7 +91,11 @@ namespace DLTuber
                 if(vidTitle.InvokeRequired)
                 {
                     vidTitle.BeginInvoke((MethodInvoker)delegate() { vidTitle.Text = "Title: " + title;}); 
-                }                
+                }
+                else
+                {
+                    vidTitle.Text = "Title: " + title;
+                }               
                 videoThumbNail.Load("https://i.ytimg.com/vi/" + url + "/mqdefault.jpg");
             } 
             catch(WebException e)
@@ -173,11 +176,12 @@ namespace DLTuber
         /// <param name="url"></param>
         private void RunDownload(string url)
         {
+         
             if (isValidUrl(url))
             {
                 loadThumbNail(url.Split('=')[1]);
                 string dir;
-                string title = GetTitle(url);
+                string title = GetTitle(url.Split('=')[1]);
                 vidTitle.Text = "Title: " + title; 
                 FormStatus childForm = new FormStatus();
                 ProgressBar progBar = childForm.getProgressBar();
@@ -186,17 +190,17 @@ namespace DLTuber
                 {
                     dir = openFileLocation("mp3");
                     childForm.Show();
-                    Thread audioThread = new Thread(() => Downloader.startDownloadAudioThread("mp3", url, dir, ref progBar));
-                    audioThread.SetApartmentState(ApartmentState.STA); 
-                    audioThread.Start();      
+                    Thread audioThread = new Thread(() => Downloader.startDownloadAudioThread("mp3", url, dir, ref progBar,ref childForm));
+                    audioThread.SetApartmentState(ApartmentState.STA);
+                    audioThread.Start();         
                 }
                 else if (mp4RadioBtn.Checked)
                 {
                     dir = openFileLocation("mp4");
-                    childForm.Show();
-                    Thread videoThread = new Thread(() => Downloader.startDownloadVideoThread("mp3", url, dir, ref progBar));
+                    childForm.Show();   
+                    Thread videoThread = new Thread(() => Downloader.startDownloadVideoThread("mp3", url, dir, ref progBar,ref childForm));
                     videoThread.SetApartmentState(ApartmentState.STA);
-                    videoThread.Start();
+                    videoThread.Start();                   
                 }
                 else
                 {

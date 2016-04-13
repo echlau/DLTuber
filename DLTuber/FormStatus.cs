@@ -1,5 +1,6 @@
 ﻿using System.Windows.Forms;
 using System.Net.NetworkInformation;
+using System;
 /// <summary>
 /// Author: Manish Mallavarapu, Eric Lau
 /// Updated: 04/04/2016, by Manish Mallavarapu 
@@ -8,14 +9,17 @@ namespace DLTuber
 {
     public partial class FormStatus : Form
     {
-        
+        public bool isCanceled = false; 
         public FormStatus()
         {
             InitializeComponent();
             NetworkChange.NetworkAvailabilityChanged += AvailabilityChanged;
             FormBorderStyle = FormBorderStyle.FixedDialog;
         }
-           
+        private void isCancelCLicked(object sender, EventArgs e)
+        {
+            isCanceled = true; 
+        }
         public ProgressBar getProgressBar()
         {
             return statusBar; 

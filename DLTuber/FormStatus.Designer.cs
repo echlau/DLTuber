@@ -30,7 +30,8 @@
         {
             this.statusBar = new System.Windows.Forms.ProgressBar();
             this.vidTitle = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.statusLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // statusBar
@@ -52,21 +53,30 @@
             this.vidTitle.TabIndex = 1;
             this.vidTitle.Text = "Title:";
             // 
-            // button1
+            // cancelButton
             // 
-            this.button1.Location = new System.Drawing.Point(284, 94);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "Cancel";
-            this.button1.UseVisualStyleBackColor = true;
+            this.cancelButton.Location = new System.Drawing.Point(284, 94);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(75, 23);
+            this.cancelButton.TabIndex = 2;
+            this.cancelButton.Text = "Cancel";
+            this.cancelButton.UseVisualStyleBackColor = true;
+            // 
+            // statusLabel
+            // 
+            this.statusLabel.AutoSize = true;
+            this.statusLabel.Location = new System.Drawing.Point(12, 94);
+            this.statusLabel.Name = "statusLabel";
+            this.statusLabel.Size = new System.Drawing.Size(0, 13);
+            this.statusLabel.TabIndex = 3;
             // 
             // FormStatus
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(370, 129);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.statusLabel);
+            this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.vidTitle);
             this.Controls.Add(this.statusBar);
             this.Margin = new System.Windows.Forms.Padding(2);
@@ -81,6 +91,7 @@
 
         private System.Windows.Forms.ProgressBar statusBar;
         private System.Windows.Forms.Label vidTitle;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.Label statusLabel;
     }
 }

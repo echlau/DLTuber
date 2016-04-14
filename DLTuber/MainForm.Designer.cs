@@ -35,7 +35,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.mediaTypeBox = new System.Windows.Forms.GroupBox();
-            this.wavRadioBtn = new System.Windows.Forms.RadioButton();
             this.mp4RadioBtn = new System.Windows.Forms.RadioButton();
             this.mp3RadioBtn = new System.Windows.Forms.RadioButton();
             this.fileLocationDialog = new System.Windows.Forms.SaveFileDialog();
@@ -112,25 +111,13 @@
             // 
             // mediaTypeBox
             // 
-            this.mediaTypeBox.Controls.Add(this.wavRadioBtn);
             this.mediaTypeBox.Controls.Add(this.mp4RadioBtn);
             this.mediaTypeBox.Controls.Add(this.mp3RadioBtn);
             this.mediaTypeBox.Location = new System.Drawing.Point(349, 174);
             this.mediaTypeBox.Name = "mediaTypeBox";
-            this.mediaTypeBox.Size = new System.Drawing.Size(78, 79);
+            this.mediaTypeBox.Size = new System.Drawing.Size(78, 54);
             this.mediaTypeBox.TabIndex = 10;
             this.mediaTypeBox.TabStop = false;
-            // 
-            // wavRadioBtn
-            // 
-            this.wavRadioBtn.AutoSize = true;
-            this.wavRadioBtn.Location = new System.Drawing.Point(18, 55);
-            this.wavRadioBtn.Name = "wavRadioBtn";
-            this.wavRadioBtn.Size = new System.Drawing.Size(45, 17);
-            this.wavRadioBtn.TabIndex = 2;
-            this.wavRadioBtn.TabStop = true;
-            this.wavRadioBtn.Text = "wav";
-            this.wavRadioBtn.UseVisualStyleBackColor = true;
             // 
             // mp4RadioBtn
             // 
@@ -220,7 +207,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.GroupBox mediaTypeBox;
-        private System.Windows.Forms.RadioButton wavRadioBtn;
         private System.Windows.Forms.RadioButton mp4RadioBtn;
         private System.Windows.Forms.RadioButton mp3RadioBtn;
         private System.Windows.Forms.SaveFileDialog fileLocationDialog;

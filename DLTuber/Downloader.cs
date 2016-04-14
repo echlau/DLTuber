@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -44,8 +45,8 @@ namespace DLTuber
         /// <param name="progressBar"></param>
         public static void startDownloadVideoThread(string v, string url, string dir,ref ProgressBar progressBar,ref FormStatus childForm)
         {
-            isVideo_ = false;
-            isAudio_ = true;
+            isVideo_ = true;
+            isAudio_ = false;
             v_ = v;
             url_ = url;
             dir_ = dir;
@@ -56,8 +57,8 @@ namespace DLTuber
             videodl.ProgressChanged += bw_updateProgressBar;
             videodl.WorkerReportsProgress = true;
             videodl.WorkerSupportsCancellation = true;
-            Button cancelButton = childForm.CancelButton as Button;
-            //cancelButton.Click += cancelDownload;
+            Button cancelButton = childForm.Controls.Find("cancelButton", false)[0] as Button;
+            cancelButton.Click += cancelDownload;
             if (!videodl.IsBusy)
             {
                 videodl.RunWorkerAsync();
@@ -85,8 +86,8 @@ namespace DLTuber
             audiodl.ProgressChanged += bw_updateProgressBar;
             audiodl.WorkerReportsProgress = true;
             audiodl.WorkerSupportsCancellation = true;
-            Button cancelButton = childForm.CancelButton as Button;
-            //cancelButton.Click += cancelDownload;
+            Button cancelButton = childForm.Controls.Find("cancelButton",false)[0] as Button;
+            cancelButton.Click += cancelDownload;
             if (!audiodl.IsBusy)
             {
                 audiodl.RunWorkerAsync();
@@ -102,6 +103,15 @@ namespace DLTuber
             {
                 audiodl.CancelAsync(); 
             }
+            try
+            {
+                File.Delete(dir_);
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("There was an error deleting download file"); 
+            }
+            childForm_.Close();
         }
         private static void bw_downloadAudio(object send, DoWorkEventArgs e)
         {
@@ -202,7 +212,7 @@ namespace DLTuber
             var videoDownloader = new VideoDownloader(video, dir);
             // Register the ProgressChanged event and print the current progress
             videoDownloader.DownloadProgressChanged += (sender, args) => progressBar1.Invoke((Action)(() => { progressBar1.Value = (int)(args.ProgressPercentage); }));
-
+            videoDownloader.DownloadFinished += completedDownload;
             /*
               Execute the video downloader.
               For GUI applications note, that this method runs synchronously.
@@ -238,17 +248,17 @@ namespace DLTuber
                 {
                     DownloadUrlResolver.DecryptDownloadUrl(video);
                 }
-                var audioDownloader = new AudioDownloader(video, path);    
+                var audioDownloader = new AudioDownloader(video, path);
                 audioDownloader.DownloadProgressChanged += (sender, args) => progressBar.Invoke((Action)(() => { progressBar.Value = (int)(args.ProgressPercentage * 0.85); }));
                 audioDownloader.AudioExtractionProgressChanged += (sender, args) => progressBar.Invoke((Action)(() => { progressBar.Value = (int)(85 + args.ProgressPercentage * 0.15); }));
-                audioDownloader.DownloadFinished += (sender, args) => completedDownload();
+                audioDownloader.DownloadFinished += completedDownload; 
                 audioDownloader.Execute();
             }
         }
-
-        private static void completedDownload()
+        private static void completedDownload(object sender, EventArgs e)
         {
-            ((Button)childForm_.Controls.Find("button1", false)[0]).Text = "Done";
+            
+            childForm_.buttonTextDone();
         }
        
     }

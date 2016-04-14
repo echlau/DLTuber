@@ -16,10 +16,6 @@ namespace DLTuber
             NetworkChange.NetworkAvailabilityChanged += AvailabilityChanged;
             FormBorderStyle = FormBorderStyle.FixedDialog;
         }
-        private void isCancelCLicked(object sender, EventArgs e)
-        {
-            isCanceled = true; 
-        }
         public ProgressBar getProgressBar()
         {
             return statusBar; 
@@ -33,6 +29,10 @@ namespace DLTuber
             MessageBox.Show("A problem occured while downloading your video, please check the internet and try again"
                             ,"No Internet Connection",MessageBoxButtons.OK
                             , MessageBoxIcon.Error);
+        }
+        public void buttonTextDone()
+        {
+            cancelButton.Text = "Done";
         }
     }
 }

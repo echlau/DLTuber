@@ -1,0 +1,5 @@
+C:\Users\manish\Desktop\COMP-3951-Project\DLTuber\UITests\bin\Debug\UITests.dll
+C:\Users\manish\Desktop\COMP-3951-Project\DLTuber\UITests\bin\Debug\UITests.pdb
+C:\Users\manish\Desktop\COMP-3951-Project\DLTuber\UITests\obj\Debug\UITests.csprojResolveAssemblyReference.cache
+C:\Users\manish\Desktop\COMP-3951-Project\DLTuber\UITests\obj\Debug\UITests.dll
+C:\Users\manish\Desktop\COMP-3951-Project\DLTuber\UITests\obj\Debug\UITests.pdb

@@ -200,7 +200,7 @@ namespace DLTuber
                     childForm.Show();   
                     Thread videoThread = new Thread(() => Downloader.startDownloadVideoThread("mp3", url, dir, ref progBar,ref childForm));
                     videoThread.SetApartmentState(ApartmentState.STA);
-                    videoThread.Start();                   
+                    videoThread.Start();             
                 }
                 else
                 {

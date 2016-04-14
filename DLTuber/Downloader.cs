@@ -241,8 +241,14 @@ namespace DLTuber
                 var audioDownloader = new AudioDownloader(video, path);    
                 audioDownloader.DownloadProgressChanged += (sender, args) => progressBar.Invoke((Action)(() => { progressBar.Value = (int)(args.ProgressPercentage * 0.85); }));
                 audioDownloader.AudioExtractionProgressChanged += (sender, args) => progressBar.Invoke((Action)(() => { progressBar.Value = (int)(85 + args.ProgressPercentage * 0.15); }));
+                audioDownloader.DownloadFinished += (sender, args) => completedDownload();
                 audioDownloader.Execute();
             }
+        }
+
+        private static void completedDownload()
+        {
+            ((Button)childForm_.Controls.Find("button1", false)[0]).Text = "Done";
         }
        
     }
